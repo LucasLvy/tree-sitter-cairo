@@ -299,14 +299,17 @@ module.exports = grammar({
     // impl HashBool<S, +HashStateTrait<S>, +Drop<S>> = into_felt252_based::HashImpl<bool, S>;
     // pub type usize = u32;
     type_item: ($) =>
-      seq(
-        optional($.visibility_modifier),
-        choice("type", "impl"),
-        field("name", $._type_identifier),
-        field("type_parameters", optional($.type_parameters)),
-        "=",
-        choice(field("type", $._type)),
-        ";"
+      choice(
+        $.extern_type_item,
+        seq(
+          optional($.visibility_modifier),
+          choice("type", "impl"),
+          field("name", $._type_identifier),
+          field("type_parameters", optional($.type_parameters)),
+          "=",
+          choice(field("type", $._type)),
+          ";"
+        )
       ),
 
     // pub extern fn hades_permutation(
@@ -550,6 +553,8 @@ module.exports = grammar({
         "fn",
         "if",
         "impl",
+        "extern",
+        "nopanic",
         "let",
         "loop",
         "match",
